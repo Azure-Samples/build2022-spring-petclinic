@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'springpetclinicrpza'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_60C805A9F1A64D39A459FB358BEA1E5E }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C52E3B328C9E4D23897959592BF9207B }}
           package: '*.jar'
