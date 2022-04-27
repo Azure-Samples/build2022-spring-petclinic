@@ -27,7 +27,7 @@ jobs:
       - name: Log in to container registry
         uses: docker/login-action@v1
         with:
-          registry: springpetclinicrpza.azurecr.io/springpetclinic:latest
+          registry: springpetclinicrpza/springpetclinic:latest
           username: ${{ secrets.SPRINGPETCLINICRPZA_REGISTRY_USERNAME }}
           password: ${{ secrets.SPRINGPETCLINICRPZA_REGISTRY_PASSWORD }}
 
@@ -35,7 +35,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: springpetclinicrpza.azurecr.io/springpetclinic:latest/springpetclinic:${{ github.sha }}
+          tags: springpetclinicrpza/springpetclinic:latest/springpetclinic:${{ github.sha }}
           file: ./Dockerfile
           context: ./
 
@@ -58,5 +58,5 @@ jobs:
             echo "Installing containerapp extension"
             az config set extension.use_dynamic_install=yes_without_prompt
             echo "Starting Deploying"
-            az containerapp registry set -n springpetclinicrpza -g springpetclinicrpza --server springpetclinicrpza.azurecr.io/springpetclinic:latest --username  ${{ secrets.SPRINGPETCLINICRPZA_REGISTRY_USERNAME }} --password ${{ secrets.SPRINGPETCLINICRPZA_REGISTRY_PASSWORD }}
-            az containerapp update -n springpetclinicrpza -g springpetclinicrpza --image springpetclinicrpza.azurecr.io/springpetclinic:latest/springpetclinic:${{ github.sha }}
+            az containerapp registry set -n springpetclinicrpza -g springpetclinicrpza --server springpetclinicrpza/springpetclinic:latest --username  ${{ secrets.SPRINGPETCLINICRPZA_REGISTRY_USERNAME }} --password ${{ secrets.SPRINGPETCLINICRPZA_REGISTRY_PASSWORD }}
+            az containerapp update -n springpetclinicrpza -g springpetclinicrpza --image springpetclinicrpza/springpetclinic:latest/springpetclinic:${{ github.sha }}
