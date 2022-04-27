@@ -68,4 +68,4 @@ jobs:
             az config set extension.use_dynamic_install=yes_without_prompt
             echo "Starting Deploying"
             az containerapp registry set -n springpetclinicrpza -g springpetclinicrpza --server springpetclinicrpza.azurecr.io --username  ${{ secrets.SPRINGPETCLINICRPZA_REGISTRY_USERNAME }} --password ${{ secrets.SPRINGPETCLINICRPZA_REGISTRY_PASSWORD }}
-            az containerapp update -n springpetclinicrpza -g springpetclinicrpza --image springpetclinicrpza.azurecr.io/springpetclinic:${{ github.sha }}
+            az containerapp update -n springpetclinicrpza -g springpetclinicrpza --revision-suffix staging --image springpetclinicrpza.azurecr.io/springpetclinic:${{ github.sha }}
