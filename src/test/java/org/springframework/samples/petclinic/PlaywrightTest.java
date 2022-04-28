@@ -8,15 +8,19 @@ import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled
+import org.springframework.samples.petclinic.PetClinicApplication;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+
+@SpringBootTest(classes = PetClinicApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PlaywrightTest {
+
+	@LocalServerPort
+	private int randomServerPort;
 
 	// Shared between all tests in this class.
 	static Playwright playwright;
@@ -30,7 +34,7 @@ public class PlaywrightTest {
 	@BeforeAll
 	static void launchBrowser() {
 		playwright = Playwright.create();
-		browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
+		browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
 	}
 
 	@AfterAll
@@ -51,7 +55,9 @@ public class PlaywrightTest {
 
 	@Test
 	void testCreateOwner() {
-		page.navigate("https://springpetclinicrpza.wittystone-2257bdab.westeurope.azurecontainerapps.io");
+		String url = String.format("http://localhost:%s", randomServerPort);
+		String url2 = "https://springpetclinicrpza.wittystone-2257bdab.westeurope.azurecontainerapps.io";
+		page.navigate(url);
 
 		// Click text=Find owners
 		page.locator("text=Find owners").click();
@@ -80,8 +86,12 @@ public class PlaywrightTest {
 		// Click text=Add Owner
 		page.locator("text=Add Owner").click();
 
-		page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("screenshot.png")).setFullPage(true));
+		var ownerNameMethod1 = (String) page.evaluate("document.getElementById('ownerName').innerText");
+		var ownerNameMethod2 = page.locator("//b[@id='ownerName']").innerText();
 
+		// Assert that the owner name is correct
+		assertEquals(ownerNameMethod1, ownerNameMethod2);
+		assertEquals("Rory Preddy", ownerNameMethod2);
 	}
 
 }
