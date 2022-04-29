@@ -56,7 +56,6 @@ public class PlaywrightTest {
 	@Test
 	void testCreateOwner() {
 		String url = String.format("http://localhost:%s", randomServerPort);
-		String url2 = "https://springpetclinicrpza.wittystone-2257bdab.westeurope.azurecontainerapps.io";
 		page.navigate(url);
 
 		// Click text=Find owners
