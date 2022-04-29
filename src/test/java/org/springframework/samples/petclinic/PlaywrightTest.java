@@ -1,17 +1,9 @@
 package org.springframework.samples.petclinic;
 
-import java.nio.file.Paths;
-
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserContext;
-import com.microsoft.playwright.BrowserType;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.*;
 
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.springframework.samples.petclinic.PetClinicApplication;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -19,16 +11,36 @@ import org.springframework.boot.web.server.LocalServerPort;
 @SpringBootTest(classes = PetClinicApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PlaywrightTest {
 
+	@Test
+	void testCreateOwner() {
+		var url = String.format("http://localhost:%s", randomServerPort);
+		page.navigate(url);
+
+		// Fill form
+		page.locator("text=Find owners").click();
+		page.locator("text=Add Owner").click();
+		page.locator("input[name=\"firstName\"]").fill("Rory");
+		page.locator("input[name=\"lastName\"]").fill("Preddy");
+		page.locator("input[name=\"address\"]").fill("Blah");
+		page.locator("input[name=\"city\"]").fill("Johannesburg");
+		page.locator("input[name=\"telephone\"]").fill("1234567890");
+
+		// Submit
+		page.locator("text=Add Owner").click();
+
+		var ownerName = page.locator("//b[@id='ownerName']").innerText();
+
+		// Assert that the owner name is correct
+		assertEquals("Rory Preddy", ownerName);
+	}
+
+
 	@LocalServerPort
 	private int randomServerPort;
 
-	// Shared between all tests in this class.
 	static Playwright playwright;
 	static Browser browser;
-
-	// New instance for each test method.
 	BrowserContext context;
-
 	Page page;
 
 	@BeforeAll
@@ -51,46 +63,6 @@ public class PlaywrightTest {
 	@AfterEach
 	void closeContext() {
 		context.close();
-	}
-
-	@Test
-	void testCreateOwner() {
-		String url = String.format("http://localhost:%s", randomServerPort);
-		page.navigate(url);
-
-		// Click text=Find owners
-		page.locator("text=Find owners").click();
-		// Click text=Add Owner
-		page.locator("text=Add Owner").click();
-		// Click input[name="firstName"]
-		page.locator("input[name=\"firstName\"]").click();
-		// Fill input[name="firstName"]
-		page.locator("input[name=\"firstName\"]").fill("Rory");
-		// Click input[name="lastName"]
-		page.locator("input[name=\"lastName\"]").click();
-		// Fill input[name="lastName"]
-		page.locator("input[name=\"lastName\"]").fill("Preddy");
-		// Click input[name="address"]
-		page.locator("input[name=\"address\"]").click();
-		// Fill input[name="address"]
-		page.locator("input[name=\"address\"]").fill("Blah");
-		// Click input[name="city"]
-		page.locator("input[name=\"city\"]").click();
-		// Fill input[name="city"]
-		page.locator("input[name=\"city\"]").fill("Johannesburg");
-		// Click input[name="telephone"]
-		page.locator("input[name=\"telephone\"]").click();
-		// Fill input[name="telephone"]
-		page.locator("input[name=\"telephone\"]").fill("1234567890");
-		// Click text=Add Owner
-		page.locator("text=Add Owner").click();
-
-		var ownerNameMethod1 = (String) page.evaluate("document.getElementById('ownerName').innerText");
-		var ownerNameMethod2 = page.locator("//b[@id='ownerName']").innerText();
-
-		// Assert that the owner name is correct
-		assertEquals(ownerNameMethod1, ownerNameMethod2);
-		assertEquals("Rory Preddy", ownerNameMethod2);
 	}
 
 }
