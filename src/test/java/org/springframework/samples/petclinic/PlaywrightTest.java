@@ -34,13 +34,14 @@ public class PlaywrightTest {
 		assertEquals("Rory Preddy", ownerName);
 	}
 
-
 	@LocalServerPort
 	private int randomServerPort;
 
 	static Playwright playwright;
 	static Browser browser;
+
 	BrowserContext context;
+
 	Page page;
 
 	@BeforeAll
