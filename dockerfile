@@ -3,8 +3,3 @@ EXPOSE 8080
 ARG JAR=spring-petclinic-2.6.0-SNAPSHOT.jar
 COPY target/$JAR /app.jar
 ENTRYPOINT ["java","-XX:MaxRAMPercentage=75","-jar","/app.jar"]
-<<<<<<< HEAD
-# new change
-=======
-# new change for israel
->>>>>>> 1b0ca6921efc5fe2ae3a3784dea8c4bb02b51455
